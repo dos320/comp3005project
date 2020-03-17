@@ -1,12 +1,100 @@
 <!DOCTYPE html>
-<body>
+<script type="module" src="/javascripts/main.js"></script>
+
+<body onload="init()">
     <h1>Bookstore</h1>
-    <button>Catalog</button>
-    <button>My Orders</button>
+    
+    <button id="myOrdersButton">My Orders</button>
+    <br>
+    <input type="text" id="username" placeholder="Username">
+    <input type="text" id="password" placeholder="Password">
+    <button id="signInButton" onclick="handleSignIn()">Sign In</button>
+    <button id="registerButton">Register</button>
+    <div id="loginNotif"></div>
+    <br><br>
+    <button id="catalogButton" onclick="handleCatalog()">Catalog</button>
     <input type="text" id="bookSearch" name="bookSearch" placeholder="Search for books...">
-    <button>Search</button>
+    <button id="searchButton">Search</button>
     <br><br>
     <select size='5'>
         <option value='1'>test 1</option>
     </select>
+    <div id="testDiv"></div>
 </body>
+
+<script>
+    /*function handleCatalog(){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = ()=>{
+            if(this.readyState == 4 && this.status == 200){
+                document.getElementById("testDiv").innerHTML = this.responseText; 
+            }
+        }
+        console.log("test");
+        xhttp.open("GET", "/index.js");
+        xhttp.send();
+    }*/
+    //function handleCatalog(){
+      //  document.getElementById("testDiv").innerHTML = handleCatalogHelper();
+    //}
+    function init(){
+        console.log("init");
+    }
+
+    function handleSignIn(){
+        let uname = document.getElementById("username").value;
+        let pword = document.getElementById("password").value;
+        //console.log(uname + ", " + pword);
+        
+        if(uname.trim() == "" || pword.trim() == ""){
+            document.getElementById("loginNotif").innerHTML = "Invalid name or password."
+        }else{
+            const url = 'http://localhost:3000/api/loginUser';
+            let jsonObj = {email: uname, password: pword};
+            //console.log(jsonObj);
+
+            fetch(url, {
+                method: 'POST',
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonObj)
+            })
+            .then(response =>{
+                if(response.ok){
+                    return response.json();
+                }
+            })
+            .then(data =>{
+                console.log(data); 
+            })
+            .catch(error => {
+                console.error(error);
+            })
+        }
+    }
+
+    function handleCatalog(){
+        const url = 'http://localhost:3000/api/users';
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok){
+                return response.json();
+            }
+            //document.getElementById("testDiv").innerHTML = response.json();
+        })
+        .then((data) =>{
+            console.log(data);
+            document.getElementById("testDiv").innerHTML = data;
+        })
+        .catch(error =>{
+            console.error(error);
+        });
+    }
+</script>
