@@ -19,6 +19,12 @@ app.get('/', (req, res)=>{
 
 app.get('/api/users', db.getUsers);
 app.post('/api/loginUser', db.loginUser);
+app.post('/api/searchBooksByName', db.searchBooksByName);
+app.post('/api/searchForBookPublisher', db.searchForBookPublisher);
+app.post('/api/createNewOrder', db.createNewOrder);
+app.post('/api/createBookOrder', db.createBookOrder);
+app.post('/api/changeStockCount', db.changeStockCount);
+app.post('/api/searchForMyOrders', db.searchForMyOrders);
 
 app.listen(port, ()=>{
     console.log(`App running on port ${port}.`);

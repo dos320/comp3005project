@@ -1,28 +1,76 @@
 <!DOCTYPE html>
-<script type="module" src="/javascripts/main.js"></script>
+<html>
+    <head>
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <script type="module" src="/javascripts/main.js"></script>
 
-<body onload="init()">
-    <h1>Bookstore</h1>
-    
-    <button id="myOrdersButton">My Orders</button>
-    <br>
-    <input type="text" id="username" placeholder="Username">
-    <input type="text" id="password" placeholder="Password">
-    <button id="signInButton" onclick="handleSignIn()">Sign In</button>
-    <button id="registerButton">Register</button>
-    <div id="loginNotif"></div>
-    <br><br>
-    <button id="catalogButton" onclick="handleCatalog()">Catalog</button>
-    <input type="text" id="bookSearch" name="bookSearch" placeholder="Search for books...">
-    <button id="searchButton">Search</button>
-    <br><br>
-    <select size='5'>
-        <option value='1'>test 1</option>
-    </select>
-    <div id="testDiv"></div>
-</body>
+    <body onload="init()">
+        <h1>Bookstore</h1>
+        
+        
+        <div id="ownerDiv" style="display:none">
+            <h4>Super secret owner controls</h4>
+            <button>Generate Report</button>
+
+        </div>
+        <br>
+        <button id="myOrdersButton" onclick="handleMyOrders()" style="display:none">My Orders</button>
+        <div id="myOrdersDiv" style="display:none">
+            <h4>My Orders</h4>
+            <select id="myOrdersSelect" size=8 style="width:300px"></select>
+        </div>
+        <br>
+        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="password" placeholder="Password">
+        <button id="signInButton" onclick="handleSignIn()">Sign In</button>
+        <button id="registerButton" onclick="handleRegister()">Register</button>
+        <div id="loginNotif"></div>
+        <br><br>
+        <button id="catalogButton" onclick="handleCatalog()">Catalog</button>
+        <input type="text" id="bookSearch" name="bookSearch" placeholder="Search for books...">
+        <button id="searchButton" onclick="handleBookSearch()">Search</button>
+        <br><br>
+        <button id="addToCartButton" onclick="handleAddToCart()">Add To Cart</button>
+        <button id="removeFromCartButton" onclick="handleRemoveFromCart()">Remove From Cart</button>
+        <button id="purchaseButton" onclick="handlePurchase()" disabled="true">Purchase</button>
+        <br><br>
+        <div id="billingInfoDiv" style="display: none">
+            <label>Shipping Info</label>
+            <br>
+            <label for="shippingAddress">Shipping Address:</label>
+            <input type="text" name="shippingAddress">
+            <br>
+            <label>Billing Info</label>
+            <br>
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" name="cardNumber">
+            <br>
+            <label>Card Type:</label>
+            <label for="cardTypeVisa">Visa</label>
+            <input type="radio" id ="cardTypeVisa" name="cardType">
+            <label for="cardTypeMasterCard">Mastercard</label>
+            <input type="radio" id="cardTypeMasterCard" name="cardType">
+            <br>
+            <button id="submitAndPurchaseButton" onclick="handleSubmitAndPurchase()">Submit and Purchase</button>
+        </div>
+        <br><br>
+        <h4>Catalog / Cart</h4>
+        <select id='bookSelect' size='20' style='width: 300px;' onchange="handleBookSelectOnChange()"></select>
+        <select id='cartSelect' size='20' style='width: 300px;'></select>
+        <div id="bookInfoDiv"></div>
+        <div id="testDiv"></div>
+    </body>
+</html>
 
 <script>
+    // TODO: disable and enable buttons according to whether the user is an owner or a normal user.
+    let signedIn = false;
+    let signedInAsOwner = false;
+
+    let queriedBooksArray; // contains all books in the current query
+    let currentUser; // current signed in account
+    let cartMap = new Map(); // contains each book in the users cart and the amount to order for each
     /*function handleCatalog(){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = ()=>{
@@ -41,22 +89,20 @@
         console.log("init");
     }
 
-    function handleSignIn(){
-        let uname = document.getElementById("username").value;
-        let pword = document.getElementById("password").value;
-        //console.log(uname + ", " + pword);
-        
-        if(uname.trim() == "" || pword.trim() == ""){
-            document.getElementById("loginNotif").innerHTML = "Invalid name or password."
-        }else{
-            const url = 'http://localhost:3000/api/loginUser';
-            let jsonObj = {email: uname, password: pword};
-            //console.log(jsonObj);
+    function handleMyOrders(){
+        let div = document.getElementById("myOrdersDiv")
+        if(div.style.display == "none"){
+            div.style.display = "block";
+            document.getElementById("myOrdersButton").innerHTML = "Hide My Orders";
 
+            // query the orders table
+            let url = "http://localhost:3000/api/searchForMyOrders";
+            let jsonObj = {userID: currentUser.id};
+            
             fetch(url, {
                 method: 'POST',
-                headers:{
-                    'Accept': 'application/json',
+                headers: {
+                    "Accept": 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(jsonObj)
@@ -66,12 +112,350 @@
                     return response.json();
                 }
             })
-            .then(data =>{
-                console.log(data); 
+            .then((data) =>{
+                let myOrdersSelect = document.getElementById("myOrdersSelect");
+                console.log(data);
+                
+                myOrdersSelect.innerHTML = ""; // clear myOrders box
+                for(let i = 0; i<data.length; i++){
+                    let tempStr = "<option value= " + i + ">Tracking ID: " + data[i].id + ", ordered on " + data[i].date + "</option>";
+                    myOrdersSelect.innerHTML += tempStr;
+                }
             })
-            .catch(error => {
-                console.error(error);
-            })
+
+        }else{
+            div.style.display = "none";
+            document.getElementById("myOrdersButton").innerHTML = "My Orders";
+        }
+    }
+
+    // check if enough stock -- done.
+    // check if user has billing/shipping information, if not, prompt them to enter it... partially done.
+    // send money
+    // create order
+    // create book_order (keep track of quantity) -- done.
+    // create places (user --> order) -- removed places, done
+    // add to orders (handle percentage as well) 
+    // if stock is below the threshold, purchase according to the orders in the past for that book -- done.
+    function handlePurchase(){
+        let cartSelect = document.getElementById("cartSelect");
+        if(!signedIn){
+            alert("Please sign in before purchasing a book.");
+        }else{
+            // maybe automatically populate the fields here
+            console.log("handlePurchase() called.");
+            let div = document.getElementById("billingInfoDiv")
+            
+            // check if enough stock, if fail alert
+
+            if(div.style.display === "none"){
+                div.style.display = "block"
+                document.getElementById("purchaseButton").innerHTML = "Hide Purchase Panel";
+            }else{
+                div.style.display = "none";
+                document.getElementById("purchaseButton").innerHTML = "Purchase";
+            }
+            
+            // populate the cartmap
+            for(let i = 0; i< cartSelect.length; i++){
+                let book = cartSelect.options[i].text;
+                if(!cartMap.has(book)){
+                    cartMap.set(book, 1);
+                }else{
+                    cartMap.set(book, cartMap.get(book)+1); // increment by 1
+                }
+                //console.log(cartMap);
+            }
+
+            // check if any of the values are larger than the stock amounts of the books
+            let url = "http://localhost:3000/api/searchBooksByName";
+            //let passedStockCheck = true;
+            for(let [key, value] of cartMap){
+                
+                let jsonObj = {query: key}
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj)
+                })
+                .then(response =>{
+                    if(response.ok){
+                        return response.json();
+                    }
+                })
+                .then((data) =>{
+                    if(data[0].stock_count < value){
+                        alert("You have too many orders of " + key + ". Please revise your order.");
+                        div.style.display = "none";
+                        //passedStockCheck = false;
+                    }
+                })
+            }
+
+            /*
+            if(passedStockCheck){
+                console.log("test");
+            }
+            */
+            
+
+        }
+    }
+
+    // handles the submit and purchase button in the billing information div
+    // add to orders, book order
+    function handleSubmitAndPurchase(){
+        // create order
+        let url = "http://localhost:3000/api/createNewOrder";
+        let jsonObj = {userID: currentUser.id};
+        console.log(jsonObj);
+        let orderID;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response =>{
+            if(response.ok){
+                return response.json();
+            }
+        })
+        .then((data) =>{
+            console.log(data);
+            // orderID = data[x].whatever .. set the orderID here so that we can use in book order
+            // create book order
+            url = "http://localhost:3000/api/searchBooksByName";
+            for(let [key, value] of cartMap){
+                let jsonObj = {query: key}
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj)
+                })
+                .then(response =>{
+                    if(response.ok){
+                        return response.json();
+                    }
+                })
+                .then((data) =>{
+                    // create a book order for each item in cartMap
+                    let bookID = data[0].id;
+                    let jsonObj2 = {bookID: bookID, quantity: value}; // set order_id to the latest item in orders
+                    let url2 = "http://localhost:3000/api/createBookOrder";
+                    
+                    fetch(url2, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonObj2)
+                    })
+                    .then(response =>{
+                        if(response.ok){
+                            return response.json();
+                        }
+                    })
+                    .then((data)=>{
+                        // add/subtract whatever was purchased from the book stock count
+                        let url3 = "http://localhost:3000/api/changeStockCount";
+
+                        fetch(url3, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(jsonObj2)
+                        })
+                        .then(response =>{
+                            if(response.ok){
+                                return response.json();
+                            }
+                        })
+                        .then((data)=>{
+                            console.log(data);
+                        })
+                    })
+
+                })
+            }
+        })
+
+        
+    }
+
+    // removes item from cart
+    function handleRemoveFromCart(){
+        let cart = document.getElementById("cartSelect");
+        cart.remove(cart.selectedIndex);
+    }
+
+    // adds item to cart
+    function handleAddToCart(){
+        let e = document.getElementById("bookSelect");
+        let cart = document.getElementById("cartSelect");
+        let index = e.options[e.selectedIndex].value; // gets the currently selected index
+        let book = queriedBooksArray[index];
+
+        console.log(cart.options.length);
+        let tempStr = "<option value = " + cart.options.length + ">" + book.title + "</option>";  
+        cart.innerHTML += tempStr;
+    }
+
+    function handleBookSelectOnChange(){
+        let e = document.getElementById("bookSelect");
+        let index = e.options[e.selectedIndex].value;
+        let bookInfoDiv = document.getElementById("bookInfoDiv");
+        let book = queriedBooksArray[index];
+
+        let jsonObj = {publisherID: queriedBooksArray[index].publisher_id};
+        const url = 'http://localhost:3000/api/searchForBookPublisher';
+        
+        // query for the book publisher
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response =>{
+            if(response.ok){
+                return response.json();
+            }
+        })
+        .then((data) =>{
+            console.log(data);
+            bookInfoDiv.innerHTML += "<br>Publisher: " + data[0].name;
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
+        // include publisher info here... need to query the publisher table
+        console.log(book); // get book from the books array
+        bookInfoDiv.innerHTML = "Book Title: " + book.title + "<br>ISBN: " + book.isbn + "<br>Genre: " + book.genre 
+        + "<br>No. Pages: " + book.num_pages + "<br>Date Published: " + book.date_published + "<br>Price: $" 
+        + book.price + "<br>Stock left: " + book.stock_count; 
+
+        document.getElementById("purchaseButton").disabled = false;
+    }
+
+    function handleBookSearch(){
+        let searchListBox = document.getElementById("bookSelect");
+        let searchValue = document.getElementById("bookSearch").value + "";
+        
+        const url = 'http://localhost:3000/api/searchBooksByName';
+        let jsonObj = {query: searchValue};
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response =>{
+            if(response.ok){
+                return response.json()
+            }
+        })
+        .then((data) => {
+            console.log(data);
+            searchListBox.innerHTML = ""; // clear box
+            queriedBooksArray = data;
+            for(let i = 0; i < data.length; i++){
+                let tempStr = "<option value = " + i + ">" + data[i].title + "</option>";  
+                searchListBox.innerHTML += tempStr;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
+        //console.log(searchValue);
+    }
+
+    function handleSignIn(){
+        let uname = document.getElementById("username").value;
+        let pword = document.getElementById("password").value;
+        //console.log(uname + ", " + pword);
+        
+        if(signedIn){
+            //console.log(signedIn);
+            //console.log(signedInAsOwner);
+            signedIn = !signedIn;
+            if(signedInAsOwner){
+                signedInAsOwner = !signedInAsOwner;
+                
+            }
+            //console.log(signedIn);
+            //console.log(signedInAsOwner);
+            document.getElementById("signInButton").innerHTML = "Sign In";
+            document.getElementById("loginNotif").innerHTML = "Successfully logged out.";
+        }else{
+            if(uname.trim() === "" || pword.trim() === ""){
+                document.getElementById("loginNotif").innerHTML = "Invalid name or password."
+            }else{
+                
+                const url = 'http://localhost:3000/api/loginUser';
+                let jsonObj = {email: uname, password: pword};
+                //console.log(jsonObj);
+
+                fetch(url, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj)
+                })
+                .then(response =>{
+                    if(response.ok){
+                        return response.json();
+                    }
+                })
+                .then(data =>{
+                    //let parsedJSON = JSON.parse(data);
+                    console.log(data);
+                    for(let i = 0; i< data.length; i++){
+                        console.log(data[i]);
+                        currentUser = data[i]; // set current user
+                        //let parsedJSON = JSON.parse(data[i]);
+                        if(data[i].email.toUpperCase() === uname.trim().toUpperCase() && data[i].password.toUpperCase() === pword.trim().toUpperCase()){
+                            signedIn = true; // if this is true sign the user out upon another click 
+                            if(data[i].is_owner){
+                                signedInAsOwner = true;
+                                document.getElementById("ownerDiv").style.display = "block"; // enable owner controls
+                            }
+                            document.getElementById("loginNotif").innerHTML =  "Successfully logged in as " + data[i].name + ".";
+                            document.getElementById("signInButton").innerHTML = "Logout";
+                            document.getElementById("myOrdersButton").style.display = "block";
+                            break;
+                        }else{
+                            document.getElementById("loginNotif").innerHTML = "Invalid name or password.";
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+            }
         }
     }
 
@@ -96,5 +480,9 @@
         .catch(error =>{
             console.error(error);
         });
+    }
+
+    function handleRegister(){
+        console.log("handleRegister() clicked.");
     }
 </script>
