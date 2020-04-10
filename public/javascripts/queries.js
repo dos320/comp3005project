@@ -94,7 +94,7 @@ const searchBooksByAuthor = (request, response) => {
 
 const searchForBookPublisher = (request, response) => {
     const {publisherID} = request.body
-    pool.query('select publisher.name from publisher where publisher.id = $1', [publisherID], (error, results) =>{
+    pool.query('select id, name, building_number, street_name, city, province, country, postal_code, email_address, (select phone_number from pub_phone_number where publisher_id = $1) from publisher where publisher.id = $1', [publisherID], (error, results) =>{
         if(error){
             throw error;
         }
@@ -195,7 +195,10 @@ const addBookWithNewPublisher = (request, response) =>{
 
 const removeBook = (request, response) => {
     const {bookTitle} = request.body;
-    pool.query("delete from book where title = $1", [bookTitle], (error, results) =>{
+    // pg does not allow for multiple queries, so must use 'with'
+    // the owner must enter the exact name of the book to remove, so that no extra books are removed
+    // removes from book_order, book, writes
+    pool.query("with i as (delete from book where title = $1), j as (delete from writes where writes.book_id= (select id from book where upper(title) = upper($1))) delete from book_order where book_order.book_id = (select id from book where book.title = $1);", [bookTitle], (error, results) =>{
         if(error){
             throw error;
         }
@@ -224,9 +227,9 @@ const searchForPublisherByName = (request, response) => {
 }
 
 const createUser = (request, response) =>{
-    const { registerName, registerEmail, registerPassword, registerBillingBuildingNum, registerBillingStreetName, registerBillingPostalCode, registerBillingCity, registerBillingProvince, registerBillingCountry, registerCardType, registerCardNumber, registerShippingBuildingNum, registerShippingStreetName, registerShippingPostalCode, registerShippingCity, registerShippingProvince, registerShippingCountry} = request.body;
+    const { registerName, registerEmail, registerPassword, registerBillingBuildingNum, registerBillingStreetName, registerBillingPostalCode, registerBillingCity, registerBillingProvince, registerBillingCountry, registerCardType, registerCardNumber, registerShippingBuildingNum, registerShippingStreetName, registerShippingPostalCode, registerShippingCity, registerShippingProvince, registerShippingCountry, registerPhoneNum} = request.body;
     console.log(request.body);
-    pool.query("insert into users values((select max(id)+1 from users), $1::text, $2, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, false, $3)", [registerName, registerEmail, registerPassword, registerBillingBuildingNum, registerBillingStreetName, registerBillingPostalCode, registerBillingCity, registerBillingProvince, registerBillingCountry, registerCardType, registerCardNumber, registerShippingBuildingNum, registerShippingStreetName, registerShippingPostalCode, registerShippingCity, registerShippingProvince, registerShippingCountry], (error, results) => {
+    pool.query("with i as (insert into users values((select max(id)+1 from users), $1::text, $2, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, false, $3)) insert into user_phone_number values ((select max(id)+1 from users), $18)", [registerName, registerEmail, registerPassword, registerBillingBuildingNum, registerBillingStreetName, registerBillingPostalCode, registerBillingCity, registerBillingProvince, registerBillingCountry, registerCardType, registerCardNumber, registerShippingBuildingNum, registerShippingStreetName, registerShippingPostalCode, registerShippingCity, registerShippingProvince, registerShippingCountry, registerPhoneNum], (error, results) => {
         if(error){
             throw error;
         }
@@ -274,8 +277,10 @@ const addWritesNewAuthor = (request, response) => {
 }
 
 const addPublisher = (request, response) =>{
-    const {publisherName, publisherBuildingNum, publisherStreetName, publisherCity, publisherProvince, publisherCountry, publisherPostalCode, publisherEmail, publisherBankAccountNum, publisherBankName} = request.body;
-    pool.query("insert into publisher values((select max(id)+1 from publisher), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)", [publisherName, publisherBuildingNum, publisherStreetName, publisherCity, publisherProvince, publisherCountry, publisherPostalCode, publisherEmail, publisherBankAccountNum, publisherBankName], (error, results) =>{
+    // inserts into publisher and pub_phone_number
+    // need to use with here, as pg doesn't allow for multiple queries in one statement
+    const {publisherName, publisherBuildingNum, publisherStreetName, publisherCity, publisherProvince, publisherCountry, publisherPostalCode, publisherEmail, publisherBankAccountNum, publisherBankName, publisherPhoneNum} = request.body;
+    pool.query("with i as (insert into publisher values((select max(id)+1 from publisher), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)) insert into pub_phone_number values ((select max(id)+1 from publisher), $11);", [publisherName, publisherBuildingNum, publisherStreetName, publisherCity, publisherProvince, publisherCountry, publisherPostalCode, publisherEmail, publisherBankAccountNum, publisherBankName, publisherPhoneNum], (error, results) =>{
         if(error){
             throw error;
         }

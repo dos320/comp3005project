@@ -16,6 +16,8 @@
                 <h4>More Publisher Information Required:</h4>
                 <label for="ownerPublisherName">Publisher Name:</label><br>
                 <input type="text" id="ownerPublisherName"><br>
+                <label for="ownerPublisherPhoneNum">Publisher Phone Number:</label><br>
+                <input type="text" id="ownerPublisherPhoneNum"><br>
                 <label for="ownerPublisherBuildingNum">Publisher Building Number:</label><br>
                 <input type="text" id="ownerPublisherBuildingNum"><br>
                 <label for="ownerPublisherStreetName">Publisher Street Name:</label><br>
@@ -103,6 +105,8 @@
             <input type="text" id="registerEmail"><br>
             <label for="registerPassword">Password:</label><br>
             <input type="text" id="registerPassword"><br>
+            <label for="registerPhoneNum">Phone Number:</label><br>
+            <input type="text" id="registerPhoneNum"><br>
             <label for="registerBillingBuildingNum">Building Number (Billing):</label><br>
             <input type="text" id="registerBillingBuildingNum"><br>
             <label for="registerBillingStreetName">Street Name (Billing):</label><br>
@@ -187,6 +191,7 @@
         <select id='cartSelect' size='20' style='width: 300px;'></select>
         <div id="bookInfoDiv"></div>
         <button id="getMoreAuthorInfoButton" onclick="handleGetMoreAuthorInfo()" style="visibility: hidden;">About the Author...</button>
+        <button id="getMorePublisherInfoButton" onclick="handleGetMorePublisherInfoButton()" style="visibility: hidden;">About the Publisher...</button>
         <div id="testDiv"></div>
     </body>
 </html>
@@ -216,6 +221,43 @@
     //}
     function init(){
         console.log("init");
+    }
+
+    // gets more information about the publisher
+    function handleGetMorePublisherInfoButton(){
+        let e = document.getElementById("bookSelect");
+        let index = e.options[e.selectedIndex].value;
+        let book = queriedBooksArray[index];
+        let jsonObj = {publisherID: queriedBooksArray[index].publisher_id};
+        let dataString = "<h1>More Publisher Info</h1>";
+        const url = 'http://localhost:3000/api/searchForBookPublisher';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        })
+        .then(data => {
+            console.log(data);
+            dataString += "Name: " + data[0].name + "<br>" +
+                            "Address: " + data[0].building_number + " " + data[0].street_name + ", " + data[0].city +
+                                        ", " + data[0].province + ", " + data[0].country + " " + data[0].postal_code + "<br>" +
+                            "Phone Number: " + data[0].phone_number + "<br>" +
+                            "Email: " + data[0].email_address + "<br>";
+            // append the data to the innerHTML of the window
+            let win = window.open("","More Publisher Info", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=700,top="+(screen.height-400)+",left="+(screen.width-840));
+            win.document.body.innerHTML = dataString;
+        })
+        
+        
     }
 
     // handles clicking the myorders select box. 
@@ -428,6 +470,7 @@
         let ownerBookPubPrice = document.getElementById("ownerBookPubPrice").value;
         
         let ownerPublisherName = document.getElementById("ownerPublisherName").value;
+        let ownerPublisherPhoneNum = document.getElementById("ownerPublisherPhoneNum").value;
         let ownerPublisherBuildingNum = document.getElementById("ownerPublisherBuildingNum").value;
         let ownerPublisherStreetName = document.getElementById("ownerPublisherStreetName").value;
         let ownerPublisherCity = document.getElementById("ownerPublisherCity").value;
@@ -439,7 +482,7 @@
         let ownerPublisherBankName = document.getElementById("ownerPublisherBankName").value;
 
         let url = "http://localhost:3000/api/addPublisher";
-        let jsonObj = { publisherName: ownerPublisherName, 
+        let jsonObj = { publisherName: ownerPublisherName,
                         publisherBuildingNum: ownerPublisherBuildingNum,
                         publisherStreetName: ownerPublisherStreetName,
                         publisherCity: ownerPublisherCity,
@@ -448,7 +491,8 @@
                         publisherPostalCode: ownerPublisherPostalCode,
                         publisherEmail: ownerPublisherEmail,
                         publisherBankAccountNum: ownerPublisherBankAccountNum,
-                        publisherBankName: ownerPublisherBankName
+                        publisherBankName: ownerPublisherBankName,
+                        publisherPhoneNum: ownerPublisherPhoneNum 
                     };
 
         fetch(url, {
@@ -610,29 +654,41 @@
 
     // for now, this only removes by book name.
     function handleOwnerRemoveBookButton(){
+        // need to remove book dependencies from writes and author
+
         //console.log("handleOwnerRemoveBookButton() clicked.");
         let bookTitle = document.getElementById("ownerBookTitle").value;
         let url = 'http://localhost:3000/api/removeBook';
         
-        let jsonObj = {bookTitle: bookTitle};
+        // check if the book title is blank or not.
+        if(bookTitle.trim() !== ""){
+            if(confirm("Would you like to permanently remove the book, and all connections it has (incl. previous and current orders)? You cannot undo this decision!")){
+                let jsonObj = {bookTitle: bookTitle};
 
-        fetch(url, {
-            method: 'POST',
-            headers:{
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(jsonObj)
-        })
-        .then(response =>{
-            if(response.ok){
-                alert("Book successfully removed from database.");
-                return response.json();
-            }
-        })
-        .then((data) => {
-            console.log(data);
-        })
+                fetch(url, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj)
+                })
+                .then(response =>{
+                    if(response.ok){
+                        alert("Book successfully removed from database.");
+                        return response.json();
+                    }else{
+                        alert("Could not find the book to remove.")
+                    }
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+            } 
+        }else{
+            alert("The book title field is blank. Please fill it in.")
+        }
+        
     }
 
     function handleOwnerGenerateReportButton(){
@@ -866,12 +922,14 @@
                 }
 
                 // populate the cartmap
+                cartMap.clear();
                 for(let i = 0; i< cartSelect.length; i++){
                     let book = cartSelect.options[i].text;
                     if(!cartMap.has(book)){
                         cartMap.set(book, 1);
                     }else{
-                        cartMap.set(book, cartMap.get(book)+1); // increment by 1
+                        //console.log("here");
+                        cartMap.set(book, (cartMap.get(book))+1); // increment by 1
                     }
                     //console.log(cartMap);
                 }
@@ -897,9 +955,11 @@
                         }
                     })
                     .then((data) =>{
+                        //console.log(data[0].stock_count + " " + value);
                         if(data[0].stock_count < value){
                             alert("You have too many orders of " + key + ". Please revise your order.");
                             div.style.display = "none";
+                            document.getElementById("purchaseButton").innerHTML = "Purchase";
                             //passedStockCheck = false;
                         }
                     })
@@ -1015,6 +1075,16 @@
     // removes item from cart
     function handleRemoveFromCart(){
         let cart = document.getElementById("cartSelect");
+        // remove from cart map
+        /*for(let [key, value] of cartMap){
+            // decrement the value of the item in the cart map
+            if(key.trim() === cart.options[cart.selectedIndex].innerHTML.trim()){
+                cartMap.get(key);
+                cartMap.set(key, (cartMap.get(key))-1);
+                cartMap.get(key);
+                //cart.remove(cart.selectedIndex);
+            }
+        }*/
         cart.remove(cart.selectedIndex);
     }
 
@@ -1099,6 +1169,8 @@
         })
 
         // include publisher info here... need to query the publisher table
+        // unhide the get publisher info button
+        document.getElementById("getMorePublisherInfoButton").style.visibility = "visible";
         console.log(book); // get book from the books array
         bookInfoDiv.innerHTML = "Book Title: " + book.title + "<br>ISBN: " + book.isbn + "<br>Genre: " + book.genre 
         + "<br>No. Pages: " + book.num_pages + "<br>Date Published: " + book.date_published + "<br>Price: $" 
@@ -1137,6 +1209,7 @@
         // clear bookinfodiv, set about the author button's visibility to hidden
         document.getElementById("bookInfoDiv").innerHTML = "";
         document.getElementById("getMoreAuthorInfoButton").style.visibility = "hidden";
+        document.getElementById("getMorePublisherInfoButton").style.visiblity = "hidden";
 
         fetch(url, {
             method: 'POST',
@@ -1300,6 +1373,7 @@
         let registerShippingCity = document.getElementById("registerShippingCity").value;
         let registerShippingProvince = document.getElementById("registerShippingProvince").value;
         let registerShippingCountry = document.getElementById("registerShippingCountry").value;
+        let registerPhoneNum = document.getElementById("registerPhoneNum").value;
 
         console.log(registerName);
 
@@ -1320,7 +1394,8 @@
                         registerShippingPostalCode: registerShippingPostalCode,
                         registerShippingCity: registerShippingCity,
                         registerShippingProvince: registerShippingProvince,
-                        registerShippingCountry: registerShippingCountry}
+                        registerShippingCountry: registerShippingCountry,
+                        registerPhoneNum: registerPhoneNum};
 
         fetch(url, {
             method: 'POST',
