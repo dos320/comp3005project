@@ -9,26 +9,143 @@
         <h1>Bookstore</h1>
         
         
-        <div id="ownerDiv" style="display:none">
+        <div id="ownerDiv" style="display:none; border:1px solid black">
             <h4>Super secret owner controls</h4>
-            <button>Generate Report</button>
+            
+            <div id="ownerMorePublisherInfoDiv" style="display:none; border: 1px solid black">
+                <h4>More Publisher Information Required:</h4>
+                <label for="ownerPublisherName">Publisher Name:</label><br>
+                <input type="text" id="ownerPublisherName"><br>
+                <label for="ownerPublisherBuildingNum">Publisher Building Number:</label><br>
+                <input type="text" id="ownerPublisherBuildingNum"><br>
+                <label for="ownerPublisherStreetName">Publisher Street Name:</label><br>
+                <input type="text" id="ownerPublisherStreetName"><br>
+                <label for="ownerPublisherCity">Publisher City:</input><br>
+                <input type="text" id="ownerPublisherCity"><br>
+                <label for="ownerPublisherProvince">Publisher Province:</label><br>
+                <input type="text" id="ownerPublisherProvince"><br>
+                <label for="ownerPublisherCountry">Publisher Country:</label><br>
+                <input type="text" id="ownerPublisherCountry"><br>
+                <label for="ownerPublisherPostalCode">Publisher Postal Code:</label><br>
+                <input type="text" id="ownerPublisherPostalCode"><br>
+                <label for="ownerPublisherEmail">Publisher Email:</label><br>
+                <input type="text" id="ownerPublisherEmail"><br>
+                <label for="ownerPublisherBankAccountNum">Publisher Bank Account #:</label><br>
+                <input type="text" id="ownerPublisherBankAccountNum"><br>
+                <label for="ownerPublisherBankName">Publisher Bank Name:</label><br>
+                <input type="text" id="ownerPublisherBankName"><br>
+                <button id="ownerMorePublisherInfoButton" onclick="handleOwnerMorePublisherInfoButton()">Submit</button>
+            </div>
 
+            <div id="ownerMoreAuthorInfoDiv" style="display:none; border: 1px solid black">
+                <h4>More Author Information Required:</h4>
+                <label for="ownerAuthorBirthday">Author Birthday (yyyy-MM-DD):</label><br>
+                <input type="text" id="ownerAuthorBirthday"><br>
+                <label for="ownerAuthorAltNames">Author Alt Names:</label><br>
+                <input type="text" id="ownerAuthorAltNames"><br>
+                <button id="ownerMoreAuthorInfoButton" onclick="handleOwnerMoreAuthorInfoButton()">Submit</button>
+            </div>
+            
+            <label for="ownerBookTitle">Enter Book Title:</label><br>
+            <input type="text" id="ownerBookTitle"><br>
+            <label for="ownerAuthorName">Author Name:</label><br>
+            <input type="text" id="ownerAuthorName"><br>
+            <label for="ownerBookPublisherID">Publisher Name:</label><br>
+            <input type="text" id="ownerBookPublisherID"><br>
+            <label for="ownerBookISBN">ISBN:</label><br>
+            <input type="text" id="ownerBookISBN"><br>
+            <label for="ownerBookGenre">Book Genre:</label><br>
+            <input type="text" id="ownerBookGenre"><br>
+            <label for="ownerBookNumPages">Number of Pages:</label><br>
+            <input type="text" id="ownerBookNumPages"><br>
+            <label for="ownerBookDatePublished">Date Published (yyyy-MM-DD):</label><br>
+            <input type="text" id="ownerBookDatePublished"><br>
+            <label for="ownerBookPrice">Book Price:</label><br>
+            <input type="text" id="ownerBookPrice"><br>
+            <label for="ownerBookStockCount">Initial Stock Count:</label><br>
+            <input type="text" id="ownerBookStockCount"><br>
+            <label for="ownerBookPubPercentage">Publisher Cut (Decimal):</label><br>
+            <input type="text" id="ownerBookPubPercentage"><br>
+            <label for="ownerBookPubPrice">Publisher Wholesale Price:</label><br>
+            <input type="text" id="ownerBookPubPrice"><br>
+            <button id="ownerAddBookButton" onclick="handleOwnerAddBookButton()">Add Book</button>
+            <button id="ownerRemoveBookButton" onclick="handleOwnerRemoveBookButton()">Remove Book</button>
+            <button id="ownerGenerateReportButton" onclick="handleOwnerGenerateReportButton()">Generate Report</button>
+            <br>
+            <label>Choose Report Type:</label>
+            <br>
+            <label for="reportExpenditures">Expenditures</label>
+            <input type="radio" id="reportExpenditures" name="reportGeneration">
+            <label for="reportSalesPerGenre">Sales Per Genre</label>
+            <input type="radio" id="reportSalesPerGenre" name="reportGeneration">
+            <label for="reportSalesPerAuthor">Sales Per Author</label>
+            <input type="radio" id="reportSalesPerAuthor" name="reportGeneration">  
         </div>
         <br>
         <button id="myOrdersButton" onclick="handleMyOrders()" style="display:none">My Orders</button>
         <div id="myOrdersDiv" style="display:none">
             <h4>My Orders</h4>
-            <select id="myOrdersSelect" size=8 style="width:300px"></select>
+            <select id="myOrdersSelect" size=8 style="width:300px" onchange="handleMyOrdersSelectOnChange()"></select>
+            <p>Order Info:</p>
+            <div id="myOrdersInfoDiv">Click on an order to see more details.</div>
         </div>
         <br>
         <input type="text" id="username" placeholder="Username">
         <input type="text" id="password" placeholder="Password">
         <button id="signInButton" onclick="handleSignIn()">Sign In</button>
         <button id="registerButton" onclick="handleRegister()">Register</button>
-        <div id="loginNotif"></div>
+        <div id="loginNotif"></div><br><br>
+        <div id="registerDiv" style="display:none; border: 1px solid black">
+            <h4>Registration</h4>
+            <label for="registerName">Full Name:</label><br>
+            <input type="text" id="registerName"><br>
+            <label for="registerEmail">Email:</label><br>
+            <input type="text" id="registerEmail"><br>
+            <label for="registerPassword">Password:</label><br>
+            <input type="text" id="registerPassword"><br>
+            <label for="registerBillingBuildingNum">Building Number (Billing):</label><br>
+            <input type="text" id="registerBillingBuildingNum"><br>
+            <label for="registerBillingStreetName">Street Name (Billing):</label><br>
+            <input type="text" id="registerBillingStreetName"><br>
+            <label for="registerBillingPostalCode">Postal Code (Billing):</label><br>
+            <input type="text" id="registerBillingPostalCode"><br>
+            <label for="registerBillingCity">City (Billing):</label><br>
+            <input type="text" id="registerBillingCity"><br>
+            <label for="registerBillingProvince">Province (Billing):</label><br>
+            <input type="text" id="registerBillingProvince"><br>
+            <label for="registerBillingCountry">Country (Billing):</label><br>
+            <input type="text" id="registerBillingCountry"><br>
+            <label for="registerCardType">Card Type:</label><br>
+            <input type="text" id="registerCardType"><br>
+            <label for="registerCardNumber">Card Number:</label><br>
+            <input type="text" id="registerCardNumber"><br>
+            <label for="registerShippingBuildingNum">Building Number (Shipping):</label><br>
+            <input type="text" id="registerShippingBuildingNum"><br>
+            <label for="registerShippingStreetName">Street Name (Shipping):</label><br>
+            <input type="text" id="registerShippingStreetName"><br>
+            <label for="registerShippingPostalCode">Postal Code (Shipping):</label><br>
+            <input type="text" id="registerShippingPostalCode"><br>
+            <label for="registerShippingCity">City (Shipping): </label><br>
+            <input type="text" id="registerShippingCity"><br>
+            <label for="registerShippingProvince">Province (Shipping):</label><br>
+            <input type="text" id="registerShippingProvince"><br>
+            <label for="registerShippingCountry">Country (Shipping):</label><br>
+            <input type="text" id="registerShippingCountry"><br>
+            
+            <button id="finishRegisterButton" onclick="handleFinishRegisterButton()">Create Account</button>
+        </div>
         <br><br>
         <button id="catalogButton" onclick="handleCatalog()">Catalog</button>
         <input type="text" id="bookSearch" name="bookSearch" placeholder="Search for books...">
+        <label for="searchOptions">Search By:</label>
+        <select id="searchOptions">
+            <option value="title">Book Title</option>
+            <option value="genre">Genre</option>
+            <option value="publisher">Publisher</option>
+            <option value="author">Author</option>
+            <option value="priceLessThan">Price (Less Than)</option>
+            <option value="priceGreaterThan">Price (Greater Than)</option>
+        </select>
         <button id="searchButton" onclick="handleBookSearch()">Search</button>
         <br><br>
         <button id="addToCartButton" onclick="handleAddToCart()">Add To Cart</button>
@@ -38,8 +155,18 @@
         <div id="billingInfoDiv" style="display: none">
             <label>Shipping Info</label>
             <br>
-            <label for="shippingAddress">Shipping Address:</label>
-            <input type="text" name="shippingAddress">
+            <label for="shippingBuildingNum">Shipping Building Number:</label>
+            <input type="text" name="shippingBuildingNum" id="shippingBuildingNum"><br>
+            <label for="shippingStreetName">Shipping Street Name:</label>
+            <input type="text" name="shippingStreetName" id="shippingStreetName"><br>
+            <label for="shippingPostalCode">Shipping Postal Code:</label>
+            <input type="text" name="shippingPostalCode" id="shippingPostalCode"><br>
+            <label for="shippingCity">Shipping City:</label>
+            <input type="text" name="shippingCity" id="shippingCity"><br>
+            <label for="shippingProvince">Shipping Province:</label>
+            <input type="text" name="shippingProvince" id="shippingProvince"><br>
+            <label for="shippingCountry">Shipping Country:</label>
+            <input type="text" name="shippingCountry" id="shippingCountry"><br>
             <br>
             <label>Billing Info</label>
             <br>
@@ -48,7 +175,7 @@
             <br>
             <label>Card Type:</label>
             <label for="cardTypeVisa">Visa</label>
-            <input type="radio" id ="cardTypeVisa" name="cardType">
+            <input type="radio" id="cardTypeVisa" name="cardType">
             <label for="cardTypeMasterCard">Mastercard</label>
             <input type="radio" id="cardTypeMasterCard" name="cardType">
             <br>
@@ -59,6 +186,7 @@
         <select id='bookSelect' size='20' style='width: 300px;' onchange="handleBookSelectOnChange()"></select>
         <select id='cartSelect' size='20' style='width: 300px;'></select>
         <div id="bookInfoDiv"></div>
+        <button id="getMoreAuthorInfoButton" onclick="handleGetMoreAuthorInfo()" style="visibility: hidden;">About the Author...</button>
         <div id="testDiv"></div>
     </body>
 </html>
@@ -71,6 +199,7 @@
     let queriedBooksArray; // contains all books in the current query
     let currentUser; // current signed in account
     let cartMap = new Map(); // contains each book in the users cart and the amount to order for each
+    let currentAuthor;
     /*function handleCatalog(){
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = ()=>{
@@ -87,6 +216,539 @@
     //}
     function init(){
         console.log("init");
+    }
+
+    // handles clicking the myorders select box. 
+    function handleMyOrdersSelectOnChange(){
+        let myOrdersInfoDiv = document.getElementById("myOrdersInfoDiv");
+        let myOrdersSelect = document.getElementById("myOrdersSelect");
+        let selectedValue = myOrdersSelect.options[myOrdersSelect.selectedIndex].innerHTML;
+        let substr = parseInt(selectedValue.substring(selectedValue.indexOf(':')+1, selectedValue.indexOf(',')).trim()); 
+        let url = 'http://localhost:3000/api/getDetailsOfOrder';
+        let jsonObj = {id: substr};
+        console.log(substr);
+
+        fetch(url, {
+            method:'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response =>{
+            return response.json();
+        })
+        .then(data => {
+            let htmlString = "";
+            console.log(data);
+            if(data.length > 0){
+                for(let i = 0; i<data.length; i++){
+                    htmlString += "Title: " + data[i].title + "<br>" +
+                                    "Date Ordered: " + data[i].date + "<br>" +
+                                    "Tracking ID: " + data[i].order_id + "<br>" +
+                                    "Quantity: " + data[i].quantity + "<br>"
+                    if(currentUser.is_owner){
+                        htmlString += "Restock: " + data[i].is_restock + "<br><br>";
+                    }
+                }
+                myOrdersInfoDiv.innerHTML = htmlString;
+            }else{
+                myOrdersInfoDiv.innerHTML = "No books in this order.";
+            }
+            
+        })
+    }
+
+    function handleGetMoreAuthorInfo(){
+        let url = "http://localhost:3000/api/searchForAuthorByName";
+        let jsonObj = {authorName: currentAuthor};
+
+        fetch(url, {
+            method: 'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            let dataString = "<h1>"+data[0].name+"</h1>" +
+                            "Name: " + data[0].name + "<br>" +
+                            "Alternate Names: " + data[0].alt_names + "<br>" +
+                            "Birthdate: " + data[0].birth_date
+            let win = window.open("","More Author Info", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=700,top="+(screen.height-400)+",left="+(screen.width-840));
+            win.document.body.innerHTML = dataString;
+        })
+        
+    }    
+
+    // for now can only add using the publisher id
+    // in future: add by name, or create new publisher if name not found.
+    function handleOwnerAddBookButton(){
+        //console.log("handleOwnerAddBookButton() clicked.");
+        let ownerAuthorName = document.getElementById("ownerAuthorName").value;
+
+        let ownerBookTitle = document.getElementById("ownerBookTitle").value;
+        let ownerBookPublisher = document.getElementById("ownerBookPublisherID").value;
+        let ownerBookISBN = document.getElementById("ownerBookISBN").value;
+        let ownerBookGenre = document.getElementById("ownerBookGenre").value;
+        let ownerBookNumPages = document.getElementById("ownerBookNumPages").value;
+        let ownerBookDatePublished = document.getElementById("ownerBookDatePublished").value;
+        let ownerBookPrice = document.getElementById("ownerBookPrice").value;
+        let ownerBookStockCount = document.getElementById("ownerBookStockCount").value;
+        let ownerBookPubPercentage = document.getElementById("ownerBookPubPercentage").value;
+        let ownerBookPubPrice = document.getElementById("ownerBookPubPrice").value;
+
+        let url = "http://localhost:3000/api/searchForPublisherByName";
+        let jsonObj = {bookPublisher: ownerBookPublisher};
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then((data) => {
+            if(data.length === 0){
+                // the publisher doesn't exist, prompt the user to enter more info on the publisher
+                alert("Publisher was not found, please enter in more information.");
+                document.getElementById("ownerMorePublisherInfoDiv").style.display = "block";
+                // entered before, so automatically fills in
+                document.getElementById("ownerPublisherName").value = ownerBookPublisher + "";
+                // redirects to handleOwnerMorePublisherInfoButton()
+
+            }else{
+                // the publisher does exist.
+                let url3 = "http://localhost:3000/api/addBook";
+                let jsonObj3 =   {bookTitle: ownerBookTitle, 
+                                bookPublisher: ownerBookPublisher, 
+                                bookISBN: ownerBookISBN,
+                                bookGenre: ownerBookGenre,
+                                bookNumPages: ownerBookNumPages,
+                                bookDatePublished: ownerBookDatePublished,
+                                bookPrice: ownerBookPrice,
+                                bookStockCount: ownerBookStockCount,
+                                bookPubPercentage: ownerBookPubPercentage,
+                                bookPubPrice: ownerBookPubPrice};
+                fetch(url3, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj3)
+                })
+                .then(response =>{
+                    if(response.ok){
+                        alert("Book successfully added to database.");
+                        return response.json();
+                    }
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+
+                // search for author by name
+                // if the author(s) don't exist, then add into authors and create an entry in writes
+                // else create an entry for the found author(s) in writes
+
+                // add ability to add multiple authors
+                let url2 = 'http://localhost:3000/api/searchForAuthorByName';
+                let jsonObj2 = {authorName: ownerAuthorName};
+
+                fetch(url2, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj2)
+                })
+                .then(response => {
+                    if(response.ok){
+                        return response.json();
+                    }
+                })
+                .then((data) => {
+                    // author(s) don't exist
+                    // add new author
+                    if(data.length === 0){
+                        alert("Author was not found, please enter in more info.");
+                        // redirect to handleOwnerMoreAuthorInfoButton()
+                        document.getElementById("ownerMoreAuthorInfoDiv").style.display = "block";
+                        
+                    }else{
+                        // author exists
+                        // create new entry in writes.
+                        let url2 = 'http://localhost:3000/api/addWrites';
+                        let jsonObj2 = {authorID: data[0].id};
+
+                        fetch(url2, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(jsonObj2)
+                        })
+                        .then(response => {
+                            if(response.ok){
+                                return response.json();
+                            }
+                        })
+                    }
+                    console.log(data);
+                })
+            }
+        })
+    }
+
+    function handleOwnerMorePublisherInfoButton(){
+        console.log("handleOwnerMorePublisherInfoButton() activated.");
+        let ownerAuthorName = document.getElementById("ownerAuthorName").value;
+
+        let ownerBookTitle = document.getElementById("ownerBookTitle").value;
+        let ownerBookPublisher = document.getElementById("ownerBookPublisherID").value;
+        let ownerBookISBN = document.getElementById("ownerBookISBN").value;
+        let ownerBookGenre = document.getElementById("ownerBookGenre").value;
+        let ownerBookNumPages = document.getElementById("ownerBookNumPages").value;
+        let ownerBookDatePublished = document.getElementById("ownerBookDatePublished").value;
+        let ownerBookPrice = document.getElementById("ownerBookPrice").value;
+        let ownerBookStockCount = document.getElementById("ownerBookStockCount").value;
+        let ownerBookPubPercentage = document.getElementById("ownerBookPubPercentage").value;
+        let ownerBookPubPrice = document.getElementById("ownerBookPubPrice").value;
+        
+        let ownerPublisherName = document.getElementById("ownerPublisherName").value;
+        let ownerPublisherBuildingNum = document.getElementById("ownerPublisherBuildingNum").value;
+        let ownerPublisherStreetName = document.getElementById("ownerPublisherStreetName").value;
+        let ownerPublisherCity = document.getElementById("ownerPublisherCity").value;
+        let ownerPublisherProvince = document.getElementById("ownerPublisherProvince").value;
+        let ownerPublisherCountry = document.getElementById("ownerPublisherCountry").value;
+        let ownerPublisherPostalCode = document.getElementById("ownerPublisherPostalCode").value;
+        let ownerPublisherEmail = document.getElementById("ownerPublisherEmail").value;
+        let ownerPublisherBankAccountNum = document.getElementById("ownerPublisherBankAccountNum").value;
+        let ownerPublisherBankName = document.getElementById("ownerPublisherBankName").value;
+
+        let url = "http://localhost:3000/api/addPublisher";
+        let jsonObj = { publisherName: ownerPublisherName, 
+                        publisherBuildingNum: ownerPublisherBuildingNum,
+                        publisherStreetName: ownerPublisherStreetName,
+                        publisherCity: ownerPublisherCity,
+                        publisherProvince: ownerPublisherProvince,
+                        publisherCountry: ownerPublisherCountry,
+                        publisherPostalCode: ownerPublisherPostalCode,
+                        publisherEmail: ownerPublisherEmail,
+                        publisherBankAccountNum: ownerPublisherBankAccountNum,
+                        publisherBankName: ownerPublisherBankName
+                    };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response => {
+            // add the book with the new publisher
+            if(response.ok){
+                alert("Successfully added new publisher to database.")
+                document.getElementById("ownerMorePublisherInfoDiv").style.display = "none";
+                
+                // add the book.
+                let url3 = "http://localhost:3000/api/addBookWithNewPublisher";
+                let jsonObj3 =   {bookTitle: ownerBookTitle, 
+                                bookPublisher: ownerBookPublisher, 
+                                bookISBN: ownerBookISBN,
+                                bookGenre: ownerBookGenre,
+                                bookNumPages: ownerBookNumPages,
+                                bookDatePublished: ownerBookDatePublished,
+                                bookPrice: ownerBookPrice,
+                                bookStockCount: ownerBookStockCount,
+                                bookPubPercentage: ownerBookPubPercentage,
+                                bookPubPrice: ownerBookPubPrice};
+                fetch(url3, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj3)
+                })
+                .then(response =>{
+                    if(response.ok){
+                        alert("Book successfully added to database.");
+                        return response.json();
+                    }
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+
+                // search for author by name
+                // if the author(s) don't exist, then add into authors and create an entry in writes
+                // else create an entry for the found author(s) in writes
+
+                // add ability to add multiple authors
+                let url2 = 'http://localhost:3000/api/searchForAuthorByName';
+                let jsonObj2 = {authorName: ownerAuthorName};
+
+                fetch(url2, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObj2)
+                })
+                .then(response => {
+                    if(response.ok){
+                        return response.json();
+                    }
+                })
+                .then((data) => {
+                    // author(s) don't exist
+                    // add new author
+                    if(data.length === 0){
+                        alert("Author was not found, please enter in more info.");
+                        // redirect to handleOwnerMoreAuthorInfoButton()
+                        document.getElementById("ownerMoreAuthorInfoDiv").style.display = "block";
+                        
+                    }else{
+                        // author exists
+                        // create new entry in writes.
+                        let url2 = 'http://localhost:3000/api/addWrites';
+                        let jsonObj2 = {authorID: data[0].id};
+
+                        fetch(url2, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(jsonObj2)
+                        })
+                        .then(response => {
+                            if(response.ok){
+                                return response.json();
+                            }
+                        })
+                    }
+                    console.log(data);
+                })
+                return response.json();
+            }
+        })
+    }
+
+    function handleOwnerMoreAuthorInfoButton(){
+        let ownerAuthorBirthday = document.getElementById("ownerAuthorBirthday").value;
+        let ownerAltNames = document.getElementById("ownerAuthorAltNames").value;
+        let ownerAuthorName = document.getElementById("ownerAuthorName").value;
+
+        let ownerAltNamesString = "{";
+        let ownerAltNamesSplit = ownerAltNames.split(',');
+        for(let i=0; i<ownerAltNamesSplit.length; i++){
+            if(i < ownerAltNamesSplit.length-1){
+                ownerAltNamesString += "\"" + ownerAltNamesSplit[i] + "\",";
+            }else{
+                ownerAltNamesString += "\"" + ownerAltNamesSplit[i] + "\"}";
+            }
+        }
+
+        let url = 'http://localhost:3000/api/addAuthor';
+        let jsonObj = {authorName: ownerAuthorName, birthday: ownerAuthorBirthday, altNames: ownerAltNamesString};
+
+        // first create new author using the user's entered information.
+        // need to check if the entered information is correct.
+        if(ownerAuthorBirthday.trim() === "" || ownerAltNames === "" || ownerAuthorName === ""){
+            alert("Invalid author information entered.");
+        }else{
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonObj)
+            })
+            .then(response => {
+                if(response.ok){
+
+                    document.getElementById("ownerMoreAuthorInfoDiv").style.display = "none";
+                    alert("Successfully added author into database.");
+
+                    // create new entry in writes.
+                    let url2 = 'http://localhost:3000/api/addWritesNewAuthor';
+
+                    fetch(url2, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        if(response.ok){
+                            return response.json();
+                        }
+                    })
+                    return response.json();
+                }
+            })
+        }
+    }
+
+    // for now, this only removes by book name.
+    function handleOwnerRemoveBookButton(){
+        //console.log("handleOwnerRemoveBookButton() clicked.");
+        let bookTitle = document.getElementById("ownerBookTitle").value;
+        let url = 'http://localhost:3000/api/removeBook';
+        
+        let jsonObj = {bookTitle: bookTitle};
+
+        fetch(url, {
+            method: 'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response =>{
+            if(response.ok){
+                alert("Book successfully removed from database.");
+                return response.json();
+            }
+        })
+        .then((data) => {
+            console.log(data);
+        })
+    }
+
+    function handleOwnerGenerateReportButton(){
+        console.log("handleOwnerGenerateReportButton() clicked");
+        let radioButtonVal = 0;
+        if(document.getElementById("reportExpenditures").checked){
+            // expenditures
+            radioButtonVal = 0;
+        }else if(document.getElementById("reportSalesPerGenre").checked){
+            // sales per genre
+            radioButtonVal = 1;
+        }else{
+            // sales per author
+            radioButtonVal = 2;
+        }
+
+        console.log(radioButtonVal);
+        
+        if(radioButtonVal === 0){
+            // expenditures
+            let url = "http://localhost:3000/api/getExpenditures";
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept':'application/json'
+                }
+            })
+            .then(response =>{
+                if(response.ok){
+                    return response.json();
+                }
+            })
+            .then((data) =>{
+                console.log(data);
+                let dataString = "<h1>Total Expenditures</h1>";
+                let totalSpent = 0;
+
+                for(let i = 0; i<data.length; i++){
+                    totalSpent += (data[i].pub_price * data[i].quantity);
+                    dataString += "Date of Expenditure: " + data[i].date + "<br>" +
+                                "Book Title: " + data[i].title + "<br>" +
+                                "# Purchased: " + data[i].quantity + "<br>" + 
+                                "Price Per Unit: $" + data[i].pub_price + "<br>" +
+                                "Amount Spent: $" + Math.round(((data[i].pub_price * data[i].quantity) + Number.EPSILON) * 100) / 100 + "<br>";
+                }
+                totalSpent = Math.round((totalSpent + Number.EPSILON) * 100) / 100
+                dataString += "<br>Total Expenditures: $" + totalSpent;
+
+                let win = window.open("","Expenditure Report", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=700,top="+(screen.height-400)+",left="+(screen.width-840));
+                win.document.body.innerHTML = dataString;
+            })
+
+        }else if(radioButtonVal === 1){
+            // sales per genre
+            let url = "http://localhost:3000/api/getSalesPerGenre";
+            console.log("test");
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept':'application/json'
+                }
+            })
+            .then(response =>{
+                if(response.ok){
+                    return response.json();
+                }
+            })
+            .then((data) =>{
+                console.log(data);
+                let dataString = "<h1>Sales Per Genre</h1>";
+                let grandTotal = 0;
+
+                for(let i = 0; i<data.length; i++){
+                    console.log(data[i].genre);
+                    grandTotal += parseFloat(data[i].sum); 
+                    dataString += "Genre: " + data[i].genre + "<br>" +
+                                "Total Earned: $" + Math.round((parseFloat(data[i].sum) + Number.EPSILON) * 100) / 100 + "<br>"
+                }
+
+                grandTotal = Math.round((grandTotal + Number.EPSILON) * 100) / 100;
+                dataString += "<br>Grand Total: $" + grandTotal;
+
+                let win = window.open("","Sales Per Genre Report", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=700,top="+(screen.height-400)+",left="+(screen.width-840));
+                win.document.body.innerHTML = dataString;
+
+            })
+        }else{
+            // sales per author
+            let url = "http://localhost:3000/api/getSalesPerAuthor";
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept':'application/json'
+                }
+            })
+            .then(response =>{
+                if(response.ok){
+                    return response.json();
+                }
+            })
+            .then((data) =>{
+                console.log(data);
+                let dataString = "<h1>Sales Per Author</h1>";
+                
+                for(let i = 0; i<data.length; i++){
+                    dataString += "Author Name: " + data[i].name + "<br>" +
+                                "Alternate Names: " + data[i].alt_names + "<br>" +
+                                "Total Sales: $" + Math.round((parseFloat(data[i].sum) + Number.EPSILON) * 100) / 100 + "<br><br>";
+                }
+
+                let win = open("","Expenditure Report", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=500,height=700,top="+(screen.height-400)+",left="+(screen.width-840));
+                win.document.body.innerHTML = dataString;
+
+            })
+
+        }
     }
 
     function handleMyOrders(){
@@ -126,6 +788,11 @@
         }else{
             div.style.display = "none";
             document.getElementById("myOrdersButton").innerHTML = "My Orders";
+            
+            // clears a bunch of divs and stuff
+            document.getElementById("myOrdersSelect").innerHTML = ""; // clear the orders box.
+            document.getElementById("myOrdersInfoDiv").innerHTML = "Click on an order to see more details."; // clear the info div.
+            document.getElementById("myOrdersDiv").style.display = "none"; // hides the orders div
         }
     }
 
@@ -151,50 +818,98 @@
             if(div.style.display === "none"){
                 div.style.display = "block"
                 document.getElementById("purchaseButton").innerHTML = "Hide Purchase Panel";
+
+                // populate fields with information, if the user has it filled in.
+                // todo
+                if(currentUser != undefined){
+                    let shippingBuildingNum = document.getElementById("shippingBuildingNum");
+                    let shippingStreetName = document.getElementById("shippingStreetName");
+                    let shippingPostalCode = document.getElementById("shippingPostalCode");
+                    let shippingCity = document.getElementById("shippingCity");
+                    let shippingProvince = document.getElementById("shippingProvince");
+                    let shippingCountry = document.getElementById("shippingCountry");
+                    let cardNumber = document.getElementById("cardNumber");
+                    let cardTypeVisa = document.getElementById("cardTypeVisa");
+                    let cardTypeMasterCard = document.getElementById("cardTypeMasterCard");
+
+                    if(currentUser.shipping_building_number !== null){
+                        shippingBuildingNum.value = currentUser.shipping_building_number + "";
+                    }
+                    if(currentUser.shipping_street_name !== null){
+                        shippingStreetName.value = currentUser.shipping_street_name + "";
+                    }
+                    if(currentUser.shipping_postal_code !== null){
+                        shippingPostalCode.value = currentUser.shipping_postal_code + "";
+                    }
+                    if(currentUser.shipping_city !== null){
+                        shippingCity.value = currentUser.shipping_city + "";
+                    }
+                    if(currentUser.shipping_province !== null){
+                        shippingProvince.value = currentUser.shipping_province + "";
+                    }
+                    if(currentUser.shipping_country !== null){
+                        shippingCountry = currentUser.shipping_country + "";
+                    }
+                    if(currentUser.card_number !== null){
+                        cardNumber = currentUser.card_number + ""; 
+                    }
+                    if(currentUser.card_type !== null){
+                        if(currentUser.card_type.trim().toUpperCase() === 'VISA'){
+                            cardTypeMasterCard.checked = false;
+                            cardTypeVisa.checked = true;
+                        }else{
+                            // if the user's card is a mastercard
+                            cardTypeVisa.checked = false;
+                            cardTypeMasterCard.checked = true;
+                        }
+                    }
+                }
+
+                // populate the cartmap
+                for(let i = 0; i< cartSelect.length; i++){
+                    let book = cartSelect.options[i].text;
+                    if(!cartMap.has(book)){
+                        cartMap.set(book, 1);
+                    }else{
+                        cartMap.set(book, cartMap.get(book)+1); // increment by 1
+                    }
+                    //console.log(cartMap);
+                }
+
+                // check if any of the values are larger than the stock amounts of the books
+                let url = "http://localhost:3000/api/searchBooksByName";
+                //let passedStockCheck = true;
+                for(let [key, value] of cartMap){
+                    
+                    let jsonObj = {query: key}
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonObj)
+                    })
+                    .then(response =>{
+                        if(response.ok){
+                            return response.json();
+                        }
+                    })
+                    .then((data) =>{
+                        if(data[0].stock_count < value){
+                            alert("You have too many orders of " + key + ". Please revise your order.");
+                            div.style.display = "none";
+                            //passedStockCheck = false;
+                        }
+                    })
+                }
             }else{
                 div.style.display = "none";
                 document.getElementById("purchaseButton").innerHTML = "Purchase";
             }
             
-            // populate the cartmap
-            for(let i = 0; i< cartSelect.length; i++){
-                let book = cartSelect.options[i].text;
-                if(!cartMap.has(book)){
-                    cartMap.set(book, 1);
-                }else{
-                    cartMap.set(book, cartMap.get(book)+1); // increment by 1
-                }
-                //console.log(cartMap);
-            }
-
-            // check if any of the values are larger than the stock amounts of the books
-            let url = "http://localhost:3000/api/searchBooksByName";
-            //let passedStockCheck = true;
-            for(let [key, value] of cartMap){
-                
-                let jsonObj = {query: key}
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(jsonObj)
-                })
-                .then(response =>{
-                    if(response.ok){
-                        return response.json();
-                    }
-                })
-                .then((data) =>{
-                    if(data[0].stock_count < value){
-                        alert("You have too many orders of " + key + ". Please revise your order.");
-                        div.style.display = "none";
-                        //passedStockCheck = false;
-                    }
-                })
-            }
+            
 
             /*
             if(passedStockCheck){
@@ -210,6 +925,7 @@
     // add to orders, book order
     function handleSubmitAndPurchase(){
         // create order
+        
         let url = "http://localhost:3000/api/createNewOrder";
         let jsonObj = {userID: currentUser.id};
         console.log(jsonObj);
@@ -345,6 +1061,43 @@
             console.log(error);
         })
 
+        const url2 = 'http://localhost:3000/api/searchForAuthor';
+        let jsonObj2 = {bookTitle: queriedBooksArray[index].title};
+        fetch(url2, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj2)
+        })
+        .then(response => {
+            if(response.ok){
+                return response.json();
+            }
+        })
+        .then((data) => {
+            console.log(data);
+            if(data.length > 1){
+                document.getElementById("getMoreAuthorInfoButton").style.visibility = "hidden";
+                bookInfoDiv.innerHTML += "<br>Authors: "; 
+                for(let i = 0; i < data.length; i++){
+                    if(i < data.length - 1){
+                        bookInfoDiv.innerHTML += data[i].name + ", "; // formatting
+                    }else{
+                        bookInfoDiv.innerHTML += data[i].name;
+                    }
+                }
+            }else{
+                bookInfoDiv.innerHTML += "<br>Author: " + data[0].name;
+                document.getElementById("getMoreAuthorInfoButton").style.visibility = "visible"; // make this button invisible again upon searching, also clear the book info div
+                currentAuthor = data[0].name;
+            } 
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
         // include publisher info here... need to query the publisher table
         console.log(book); // get book from the books array
         bookInfoDiv.innerHTML = "Book Title: " + book.title + "<br>ISBN: " + book.isbn + "<br>Genre: " + book.genre 
@@ -357,9 +1110,33 @@
     function handleBookSearch(){
         let searchListBox = document.getElementById("bookSelect");
         let searchValue = document.getElementById("bookSearch").value + "";
-        
-        const url = 'http://localhost:3000/api/searchBooksByName';
+        let e = document.getElementById("searchOptions");
+        let searchFilterOption = e.options[e.selectedIndex].value;
+
+        let url; 
         let jsonObj = {query: searchValue};
+
+        if(searchFilterOption === "title"){
+            url = 'http://localhost:3000/api/searchBooksByName'; 
+        }else if(searchFilterOption === "genre"){
+            url = 'http://localhost:3000/api/searchBooksByGenre';
+        }else if(searchFilterOption === "publisher"){
+            url = 'http://localhost:3000/api/searchBooksByPublisher';
+        }else if(searchFilterOption === "author"){
+            url = 'http://localhost:3000/api/searchBooksByAuthor';
+        }else if(searchFilterOption === "priceLessThan"){
+            url = 'http://localhost:3000/api/searchBooksByPriceLessThan';
+            // only want the numeric value
+            jsonObj.query = jsonObj.query.replace('$', '');
+        }else{
+            // searchFilterOption === "priceGreaterThan"
+            url = 'http://localhost:3000/api/searchBooksByPriceGreaterThan';
+            jsonObj.query = jsonObj.query.replace('$', '');
+        }
+
+        // clear bookinfodiv, set about the author button's visibility to hidden
+        document.getElementById("bookInfoDiv").innerHTML = "";
+        document.getElementById("getMoreAuthorInfoButton").style.visibility = "hidden";
 
         fetch(url, {
             method: 'POST',
@@ -394,7 +1171,10 @@
         let uname = document.getElementById("username").value;
         let pword = document.getElementById("password").value;
         //console.log(uname + ", " + pword);
-        
+        document.getElementById("myOrdersSelect").innerHTML = ""; // clear the orders box.
+        document.getElementById("myOrdersInfoDiv").innerHTML = "Click on an order to see more details."; // clear the info div.
+        document.getElementById("myOrdersDiv").style.display = "none"; // hides the orders div
+
         if(signedIn){
             //console.log(signedIn);
             //console.log(signedInAsOwner);
@@ -432,24 +1212,30 @@
                 .then(data =>{
                     //let parsedJSON = JSON.parse(data);
                     console.log(data);
-                    for(let i = 0; i< data.length; i++){
-                        console.log(data[i]);
-                        currentUser = data[i]; // set current user
-                        //let parsedJSON = JSON.parse(data[i]);
-                        if(data[i].email.toUpperCase() === uname.trim().toUpperCase() && data[i].password.toUpperCase() === pword.trim().toUpperCase()){
-                            signedIn = true; // if this is true sign the user out upon another click 
-                            if(data[i].is_owner){
-                                signedInAsOwner = true;
-                                document.getElementById("ownerDiv").style.display = "block"; // enable owner controls
+                    if(data.length > 0){
+                        for(let i = 0; i< data.length; i++){
+                            console.log(data[i]);
+                            currentUser = data[i]; // set current user
+                            //let parsedJSON = JSON.parse(data[i]);
+                            if(data[i].email.trim().toUpperCase() === uname.trim().toUpperCase() && data[i].password.trim().toUpperCase() === pword.trim().toUpperCase()){
+                                
+                                signedIn = true; // if this is true sign the user out upon another click 
+                                if(data[i].is_owner){
+                                    signedInAsOwner = true;
+                                    document.getElementById("ownerDiv").style.display = "block"; // enable owner controls
+                                }
+                                document.getElementById("loginNotif").innerHTML =  "Successfully logged in as " + data[i].name + ".";
+                                document.getElementById("signInButton").innerHTML = "Logout";
+                                document.getElementById("myOrdersButton").style.display = "block";
+                                break;
+                            }else{
+                                document.getElementById("loginNotif").innerHTML = "Invalid name or password.";
                             }
-                            document.getElementById("loginNotif").innerHTML =  "Successfully logged in as " + data[i].name + ".";
-                            document.getElementById("signInButton").innerHTML = "Logout";
-                            document.getElementById("myOrdersButton").style.display = "block";
-                            break;
-                        }else{
-                            document.getElementById("loginNotif").innerHTML = "Invalid name or password.";
                         }
+                    }else{
+                        document.getElementById("loginNotif").innerHTML = "Invalid name or password.";
                     }
+                    
 
                 })
                 .catch(error => {
@@ -483,6 +1269,78 @@
     }
 
     function handleRegister(){
+        let registerButton = document.getElementById("registerButton");
         console.log("handleRegister() clicked.");
+        if(registerButton.innerHTML === "Register"){
+            registerButton.innerHTML = "Hide Register Panel"
+            document.getElementById("registerDiv").style.display = "block";
+        }else{
+            registerButton.innerHTML = "Register";
+            document.getElementById("registerDiv").style.display = "none";
+        }
+    }
+
+    function handleFinishRegisterButton(){
+        console.log("handleFinishRegisterButton() clicked");
+
+        let registerName = document.getElementById("registerName").value;
+        let registerEmail = document.getElementById("registerEmail").value;
+        let registerPassword = document.getElementById("registerPassword").value;
+        let registerBillingBuildingNum = document.getElementById("registerBillingBuildingNum").value;
+        let registerBillingStreetName = document.getElementById("registerBillingStreetName").value;
+        let registerBillingPostalCode = document.getElementById("registerBillingPostalCode").value;
+        let registerBillingCity = document.getElementById("registerBillingCity").value;
+        let registerBillingProvince = document.getElementById("registerBillingProvince").value;
+        let registerBillingCountry = document.getElementById("registerBillingCountry").value;
+        let registerCardType = document.getElementById("registerCardType").value;
+        let registerCardNumber = document.getElementById("registerCardNumber").value;
+        let registerShippingBuildingNum = document.getElementById("registerShippingBuildingNum").value;
+        let registerShippingStreetName = document.getElementById("registerShippingStreetName").value;
+        let registerShippingPostalCode = document.getElementById("registerShippingPostalCode").value;
+        let registerShippingCity = document.getElementById("registerShippingCity").value;
+        let registerShippingProvince = document.getElementById("registerShippingProvince").value;
+        let registerShippingCountry = document.getElementById("registerShippingCountry").value;
+
+        console.log(registerName);
+
+        let url = 'http://localhost:3000/api/createUser';
+        let jsonObj = { registerName: registerName,
+                        registerEmail: registerEmail,
+                        registerPassword: registerPassword,
+                        registerBillingBuildingNum: registerBillingBuildingNum,
+                        registerBillingStreetName: registerBillingStreetName,
+                        registerBillingPostalCode: registerBillingPostalCode,
+                        registerBillingCity: registerBillingCity,
+                        registerBillingProvince: registerBillingProvince,
+                        registerBillingCountry: registerBillingCountry,
+                        registerCardType: registerCardType,
+                        registerCardNumber: registerCardNumber,
+                        registerShippingBuildingNum: registerShippingBuildingNum,
+                        registerShippingStreetName: registerShippingStreetName,
+                        registerShippingPostalCode: registerShippingPostalCode,
+                        registerShippingCity: registerShippingCity,
+                        registerShippingProvince: registerShippingProvince,
+                        registerShippingCountry: registerShippingCountry}
+
+        fetch(url, {
+            method: 'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObj)
+        })
+        .then(response =>{
+            if(response.ok){
+                alert("Successfully registered.");
+                return response.json();
+            }
+        })
+        .then(data =>{
+           console.log(data); 
+        })
+        .catch(error => {
+            console.error(error);
+        })
     }
 </script>
