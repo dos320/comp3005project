@@ -24,7 +24,7 @@ $body$
 				and book.id in (select book.id from book where book.stock_count < 5 and book.stock_count >0)
 			 																		and book.id=temprow.id), true);
 			 	
-                 -- updates the current book with the newly ordered number of books (number of books ordered in the past month) + the existing amount of that book
+                 -- updates the current book with the newly ordered number of that book (number of that book ordered in the past month) + the existing amount of that book
                 update book
 				set stock_count =
 					stock_count + (select distinct  sum(book_order.quantity) 

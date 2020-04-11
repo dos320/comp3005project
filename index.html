@@ -295,6 +295,7 @@
                         htmlString += "Restock: " + data[i].is_restock + "<br><br>";
                     }
                 }
+                htmlString += "Order Status: Shipping"; // temp
                 myOrdersInfoDiv.innerHTML = htmlString;
             }else{
                 myOrdersInfoDiv.innerHTML = "No books in this order.";
