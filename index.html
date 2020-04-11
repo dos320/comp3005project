@@ -1,3 +1,4 @@
+<!--COMP3005 Project: By Howard Zhang (101069043) - index.html -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -139,7 +140,6 @@
             <button id="finishRegisterButton" onclick="handleFinishRegisterButton()">Create Account</button>
         </div>
         <br><br>
-        <button id="catalogButton" onclick="handleCatalog()">Catalog</button>
         <input type="text" id="bookSearch" name="bookSearch" placeholder="Search for books...">
         <label for="searchOptions">Search By:</label>
         <select id="searchOptions">
@@ -151,6 +151,7 @@
             <option value="priceGreaterThan">Price (Greater Than)</option>
         </select>
         <button id="searchButton" onclick="handleBookSearch()">Search</button>
+        <button id="clearCatalogButton" onclick="handleCatalog()" style="visibility: hidden;">Clear Catalog</button>
         <br><br>
         <button id="addToCartButton" onclick="handleAddToCart()">Add To Cart</button>
         <button id="removeFromCartButton" onclick="handleRemoveFromCart()">Remove From Cart</button>
@@ -1258,8 +1259,11 @@
             }
             //console.log(signedIn);
             //console.log(signedInAsOwner);
+            document.getElementById("")
             document.getElementById("signInButton").innerHTML = "Sign In";
             document.getElementById("loginNotif").innerHTML = "Successfully logged out.";
+            document.getElementById("myOrdersButton").innerHTML = "My Orders";
+            document.getElementById("ownerDiv").style.display = "none"; // disable owner controls
         }else{
             if(uname.trim() === "" || pword.trim() === ""){
                 document.getElementById("loginNotif").innerHTML = "Invalid name or password."
@@ -1296,6 +1300,8 @@
                                 if(data[i].is_owner){
                                     signedInAsOwner = true;
                                     document.getElementById("ownerDiv").style.display = "block"; // enable owner controls
+                                }else{
+                                    signedInAsOwner = false;
                                 }
                                 document.getElementById("loginNotif").innerHTML =  "Successfully logged in as " + data[i].name + ".";
                                 document.getElementById("signInButton").innerHTML = "Logout";

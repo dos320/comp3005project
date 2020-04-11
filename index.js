@@ -1,3 +1,6 @@
+/*
+    COMP3005 Project: By Howard Zhang (101069043) - index.js
+*/
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();

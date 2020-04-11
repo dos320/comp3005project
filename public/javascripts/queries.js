@@ -1,3 +1,6 @@
+/*
+    COMP3005 Project: By Howard Zhang (101069043) - queries.js
+*/
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'me',
