@@ -1,3 +1,8 @@
+-- this function creates a trigger that triggers upon updating a book in the database
+-- checks if its stock_count dips below 5
+-- if it does, order the amount of orders that the book in question received in the past month.
+-- update all related tables (book_order, order, book) with relevant information
+-- create an order in order, attach a book_order to it with the quantity ordered, and update the book's stock_count
 create or replace function auto_order_books_function() returns trigger as 
 $body$
 	declare 
