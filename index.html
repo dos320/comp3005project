@@ -11,7 +11,7 @@
         
         
         <div id="ownerDiv" style="display:none; border:1px solid black">
-            <h4>Super secret owner controls</h4>
+            <h4>Owner Controls</h4>
             
             <div id="ownerMorePublisherInfoDiv" style="display:none; border: 1px solid black">
                 <h4>More Publisher Information Required:</h4>
@@ -347,6 +347,11 @@
         let ownerBookPubPercentage = document.getElementById("ownerBookPubPercentage").value;
         let ownerBookPubPrice = document.getElementById("ownerBookPubPrice").value;
 
+        if(ownerBookTitle.trim() === "" || ownerBookPublisher.trim() === "" || ownerBookISBN.trim() === "" || ownerBookGenre.trim() === "" || ownerBookNumPages.trim() === "" || ownerBookDatePublished.trim() === "" || ownerBookPrice.trim() === "" || ownerBookStockCount.trim() === "" || ownerBookPubPercentage.trim() === "" || ownerBookPubPrice.trim() === ""){
+            alert("Please fill in all fields before adding a book.");
+            return;
+        }
+
         let url = "http://localhost:3000/api/searchForPublisherByName";
         let jsonObj = {bookPublisher: ownerBookPublisher};
 
@@ -497,6 +502,11 @@
                         publisherPhoneNum: ownerPublisherPhoneNum 
                     };
 
+        if(ownerPublisherName.trim() === "" || ownerPublisherPhoneNum.trim() === "" || ownerPublisherBuildingNum.trim() === "" || ownerPublisherStreetName.trim() === "" || ownerPublisherCity.trim() === "" || ownerPublisherProvince.trim() === "" || ownerPublisherCountry.trim() === "" || ownerPublisherPostalCode.trim() === "" || ownerPublisherEmail.trim() === "" || ownerPublisherBankAccountNum.trim() === "" || ownerPublisherBankName.trim() === ""){
+            alert("Please fill in all fields before submitting.");
+            return;
+        }
+
         fetch(url, {
             method: 'POST',
             headers: {
@@ -601,9 +611,15 @@
         let ownerAuthorBirthday = document.getElementById("ownerAuthorBirthday").value;
         let ownerAltNames = document.getElementById("ownerAuthorAltNames").value;
         let ownerAuthorName = document.getElementById("ownerAuthorName").value;
-
+        
         let ownerAltNamesString = "{";
         let ownerAltNamesSplit = ownerAltNames.split(',');
+        
+        if(ownerAuthorBirthday.trim() === "" || ownerAltNames.trim() === "" || ownerAuthorName.trim() === ""){
+            alert("Please fill all fields before submitting.");
+            return;
+        }
+        
         for(let i=0; i<ownerAltNamesSplit.length; i++){
             if(i < ownerAltNamesSplit.length-1){
                 ownerAltNamesString += "\"" + ownerAltNamesSplit[i] + "\",";
@@ -659,8 +675,13 @@
         // need to remove book dependencies from writes and author
 
         //console.log("handleOwnerRemoveBookButton() clicked.");
-        let bookTitle = document.getElementById("ownerBookTitle").value;
+        let bookTitle = document.getElementById("ownerBookTitle").value;        
         let url = 'http://localhost:3000/api/removeBook';
+
+        if(bookTitle.trim() === ""){
+            alert("Please fill in the \"Enter Book Title\" field before removing a book.");
+            return;
+        }
         
         // check if the book title is blank or not.
         if(bookTitle.trim() !== ""){
@@ -702,9 +723,12 @@
         }else if(document.getElementById("reportSalesPerGenre").checked){
             // sales per genre
             radioButtonVal = 1;
-        }else{
+        }else if(document.getElementById("reportSalesPerAuthor").checked){
             // sales per author
             radioButtonVal = 2;
+        }else{
+            alert("Please select a type of report before generating one.");
+            return;
         }
 
         console.log(radioButtonVal);
