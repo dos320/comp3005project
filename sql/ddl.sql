@@ -11,10 +11,6 @@ CREATE TABLE public.author
     CONSTRAINT author_pkey PRIMARY KEY (id)
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.author
-    OWNER to postgres;
 
 -- Table: public.book
 
@@ -40,10 +36,6 @@ CREATE TABLE public.book
         ON DELETE NO ACTION
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.book
-    OWNER to postgres;
 
 -- Trigger: auto_order_books
 
@@ -80,11 +72,6 @@ CREATE TABLE public.book_order
         NOT VALID
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.book_order
-    OWNER to postgres;
-
 -- Table: public.orders
 
 -- DROP TABLE public.orders;
@@ -102,11 +89,6 @@ CREATE TABLE public.orders
         NOT VALID
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.orders
-    OWNER to postgres;
-
 -- Table: public.pub_phone_number
 
 -- DROP TABLE public.pub_phone_number;
@@ -121,11 +103,6 @@ CREATE TABLE public.pub_phone_number
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-
-TABLESPACE pg_default;
-
-ALTER TABLE public.pub_phone_number
-    OWNER to postgres;
 
 -- Table: public.publisher
 
@@ -147,11 +124,6 @@ CREATE TABLE public.publisher
     CONSTRAINT publisher_pkey PRIMARY KEY (id)
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.publisher
-    OWNER to postgres;
-
 -- Table: public.stock
 
 -- DROP TABLE public.stock;
@@ -167,11 +139,6 @@ CREATE TABLE public.stock
         ON DELETE NO ACTION
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.stock
-    OWNER to postgres;
-
 -- Table: public.user_phone_number
 
 -- DROP TABLE public.user_phone_number;
@@ -186,11 +153,6 @@ CREATE TABLE public.user_phone_number
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
-
-TABLESPACE pg_default;
-
-ALTER TABLE public.user_phone_number
-    OWNER to postgres;
 
 -- Table: public.users
 
@@ -220,10 +182,6 @@ CREATE TABLE public.users
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE public.users
-    OWNER to postgres;
 
 -- Table: public.writes
 
@@ -245,8 +203,3 @@ CREATE TABLE public.writes
         ON DELETE NO ACTION
         NOT VALID
 )
-
-TABLESPACE pg_default;
-
-ALTER TABLE public.writes
-    OWNER to postgres;
