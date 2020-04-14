@@ -1,6 +1,7 @@
 /*
     COMP3005 Project: By Howard Zhang (101069043) - queries.sql
 */
+-- all of the $(number) symbols are used to represent values retrieved from the HTML front end.
 
 -- getUsers
 -- gets all the users from the database.
