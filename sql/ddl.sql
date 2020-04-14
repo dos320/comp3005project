@@ -49,6 +49,7 @@ ALTER TABLE public.book
 
 -- DROP TRIGGER auto_order_books ON public.book;
 
+-- trigger - explained in more detail in trigger.sql
 CREATE TRIGGER auto_order_books
     AFTER UPDATE 
     ON public.book
